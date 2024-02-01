@@ -1,0 +1,41 @@
+// The opts for the server, also includes the data to be written to file
+// 获取 Content-Disposition 头部
+var contentDispositionHeader = pm.response.headers.get('Content-Disposition');
+// 提取文件名
+console.log("contentDispositionHeader", contentDispositionHeader);
+// 定义正则表达式模式
+var pattern = /attachment; filename=(.*)/;
+
+// 使用正则表达式进行匹配
+var match = contentDispositionHeader.match(pattern);
+
+// 检查是否匹配到
+if (match) {
+    var filename = match[1];
+    console.log(filename);
+} else {
+    console.log("未找到匹配的文件名");
+}
+
+var fileName = match ? match[1] : 'response';
+
+let opts = {
+    requestName: fileName || request.requestName || request.url,
+    // fileExtension: 'pdf',
+    mode: 'writeFile', // Change this to any function of the fs library of node to use it.
+    uniqueIdentifier: false,
+    responseData: pm.response.stream
+};
+
+pm.sendRequest({
+    url: 'http://localhost:3000/write',
+    method: 'POST',
+    header: 'Content-Type:application/json',
+    body: {
+        mode: 'raw',
+        raw: opts
+    }
+}, function (err, res) {
+    console.log(opts)
+    console.log(res);
+})

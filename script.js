@@ -24,10 +24,10 @@ app.post('/write', (req, res) => {
     fsMode = req.body.mode || DEFAULT_MODE,
     uniqueIdentifier = req.body.uniqueIdentifier ? typeof req.body.uniqueIdentifier === 'boolean' ? Date.now() : req.body.uniqueIdentifier : false,
     filename = `${req.body.requestName}${uniqueIdentifier || ''}`,
-    filePath = `${path.join(folderPath, filename)}.${extension}`,
+    filePath = `${path.join(folderPath, filename)}`,
     options = req.body.options || undefined;
 
-  fs[fsMode](filePath, req.body.responseData, options, (err) => {
+  fs[fsMode](filePath, Buffer.from(req.body.responseData), options, (err) => {
     if (err) {
       console.log(err);
       res.send('Error');
