@@ -1,3 +1,5 @@
+[中文](./README-zh_CN.md)
+
 # ResponseToFile-Postman
 
 This project will help in writing the responses of a request from Postman.
